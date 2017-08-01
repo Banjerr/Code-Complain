@@ -1,5 +1,7 @@
 FROM node:7.1-alpine
 
+MAINTAINER Ben Redden <admin@countryfriedcoders.me>
+
 RUN mkdir -p /home/app && mkdir -p /home/data/db
 WORKDIR /home/app
 
