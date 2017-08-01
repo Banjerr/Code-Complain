@@ -8,6 +8,8 @@ RUN npm install && npm cache clean
 
 COPY . /home/app
 
-EXPOSE 3000
+RUN npm run build
 
-CMD [ "npm", "start" ]
+EXPOSE 9000
+
+CMD [ "npm", "run", "start:server"  ]
