@@ -1,13 +1,26 @@
 import React from 'react';
-import { Router, Route } from 'react-router';
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 
 import App from './components/App';
+import Account from './components/Account';
 import NotFound from './components/NotFound';
 
 const Routes = (props) => (
-  <Router {...props}>
-    <Route path="/" component={App} />
-    <Route path="*" component={NotFound} />
+  <Router>
+    <div>
+      <ul>
+        <li><Link to="/">Home</Link></li>
+        <li><Link to="/account">Account</Link></li>
+      </ul>
+
+      <hr/>
+
+      <Switch>
+        <Route exact path="/" component={App}/>
+        <Route path="/account" component={Account}/>
+        <Route component={NotFound}/>
+      </Switch>
+    </div>
   </Router>
 );
 
