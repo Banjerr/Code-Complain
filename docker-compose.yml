@@ -8,4 +8,17 @@ services:
     volumes:
       - ./app:/home/app
       - /home/app/node_modules
+      - /home/app/build
+    depends_on:
+      - rethinkdb
     restart: always
+
+  rethinkdb:
+    image: rethinkdb:latest
+    ports:
+      - 2222:8080
+      - "28015"
+      - "29015"
+    volumes:
+     - /Users/ben/rethinkdata:/data
+    command: rethinkdb --bind all
