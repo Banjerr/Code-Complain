@@ -26,6 +26,18 @@ class App extends Component {
 		};
 	}
 
+  handleNewTodoKeyDown: function (event) {
+		event.preventDefault();
+
+		var val = this.refs.newField.value.trim();
+
+		if (val) {
+			var q = r.table('code-snippet').insert({title: val.title, snippet: val.snippet, createdAt: r.now()});
+			RethinkSession.runQuery(q);
+			this.refs.newField.value = '';
+		}
+	}
+
   render() {
     const { className, ...props } = this.props;
 
