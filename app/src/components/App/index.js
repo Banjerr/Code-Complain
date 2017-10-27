@@ -1,25 +1,58 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
-
-import logo from './logo.svg';
+import ReactRethinkdb from 'react-rethinkdb';
 import './style.css';
 
+var r = ReactRethinkdb.r;
+var RethinkSession = ReactRethinkdb.DefaultSession;
+
+var secure = window.location.protocol === 'https:';
+RethinkSession.connect({
+	host: window.location.hostname,
+	port: window.location.port || (secure ? 443 : 80),
+	secure: secure,
+	db: 'code_complain',
+});
+
 class App extends Component {
+  observe(props, state) {
+		return {
+			todos: new ReactRethinkdb.QueryRequest({
+				query: r.table('complaints').orderBy({index: 'createdAt'}),
+				changes: true,
+				initial: []
+			}),
+		};
+	}
+
+  handleNewTodoKeyDown(event) {
+		event.preventDefault();
+
+		var val = this.refs.newField.value.trim();
+
+		if (val) {
+			var q = r.table('complaints').insert({title: val.title, snippet: val.snippet, createdAt: r.now()});
+			RethinkSession.runQuery(q);
+			this.refs.newField.value = '';
+		}
+	}
+
   render() {
     const { className, ...props } = this.props;
 
     return (
       <div className={classnames('App', className)} {...props}>
         <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
+
         </div>
         <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
+
         </p>
       </div>
     );
   }
 }
+
+App.mixins = [ReactRethinkdb.DefaultMixin];
 
 export default App;
