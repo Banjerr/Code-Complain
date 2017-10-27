@@ -10,29 +10,28 @@ var secure = window.location.protocol === 'https:';
 RethinkSession.connect({
 	host: window.location.hostname,
 	port: window.location.port || (secure ? 443 : 80),
-	path: '/complaint',
 	secure: secure,
-	db: 'complaints',
+	db: 'code_complain',
 });
 
 class App extends Component {
   observe(props, state) {
 		return {
 			todos: new ReactRethinkdb.QueryRequest({
-				query: r.table('code-snippet').orderBy({index: 'createdAt'}),
+				query: r.table('complaints').orderBy({index: 'createdAt'}),
 				changes: true,
 				initial: []
 			}),
 		};
 	}
 
-  handleNewTodoKeyDown: function (event) {
+  handleNewTodoKeyDown(event) {
 		event.preventDefault();
 
 		var val = this.refs.newField.value.trim();
 
 		if (val) {
-			var q = r.table('code-snippet').insert({title: val.title, snippet: val.snippet, createdAt: r.now()});
+			var q = r.table('complaints').insert({title: val.title, snippet: val.snippet, createdAt: r.now()});
 			RethinkSession.runQuery(q);
 			this.refs.newField.value = '';
 		}
