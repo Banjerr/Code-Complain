@@ -11,6 +11,8 @@ services:
       - /home/app/build
     depends_on:
       - rethinkdb
+    links:
+      - "rethinkdb:rethinkdb"
     restart: always
 
   rethinkdb:
