@@ -24,6 +24,7 @@ exports.register = function (server, options, next) {
   });
 
   server.method('db.saveEntry', (entry, callback) => {
+    console.log('entry is ', entry);
     r.db(db).table(code_snippets).insert(entry).run(conn, callback);
   });
 
@@ -34,6 +35,7 @@ exports.register = function (server, options, next) {
   server.method('db.setupChangefeedPush', () => {
     r.db(db).table(code_snippets).changes().run(conn, (err, cursor) => {
       cursor.each((err, item) => {
+        console.log('item is ', item);
         server.publish('/complaints/updates', item.new_val);
       });
     });

@@ -38,7 +38,7 @@ App.register([Inert, Nes, Db], err => {
     handler: function (request, reply) {
       App.methods.db.findEntries(5, (err, result) => {
         if (err) {
-            return reply().code(500);
+          return reply().code(500);
         }
 
         return reply(result);
@@ -46,31 +46,35 @@ App.register([Inert, Nes, Db], err => {
     }
   });
 
-  // //Create a new entry
-  // server.route({
-  //   method: 'GET',
-  //   path: '/complaints/createEntry',
-  //   handler: function (request, reply) {
-  //     const entry = {
-  //       createdAt: new Date(),
-  //       user: Faker.name.findName(),
-  //       message: Faker.lorem.paragraph(),
-  //       avatar: Faker.image.avatar()
-  //     };
-  //
-  //     server.methods.db.saveEntry(entry, (err) => {
-  //       if (err) {
-  //         return reply().code(500);
-  //       }
-  //
-  //       return reply().code(204);
-  //     });
-  //   }
-  // });
+  //Create a new entry
+  App.route({
+    method: 'POST',
+    path: '/complaints/createEntry',
+    handler: function (request, reply) {
+      // const entry = {
+      //   createdAt: new Date(),
+      //   user: Faker.name.findName(),
+      //   message: Faker.lorem.paragraph(),
+      //   avatar: Faker.image.avatar()
+      // };
+      const entry = {
+        "snippet":  "<h2>WASSUPPP!</h2>" ,
+        "title":  "WTFFFF"
+      };
+      console.log('request payload is ', request.payload);
+
+      App.methods.db.saveEntry(request.payload, (err) => {
+        if (err) {
+          return reply().code(500);
+        }
+
+        return reply().code(204);
+      });
+    }
+  });
 
   //Declare the subscription to timeline updates the client can subscribe to
   App.subscription('/complaints/updates');
-
 
   App.start(err => {
     if (err) {
