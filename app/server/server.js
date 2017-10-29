@@ -51,16 +51,7 @@ App.register([Inert, Nes, Db], err => {
     method: 'POST',
     path: '/complaints/createEntry',
     handler: function (request, reply) {
-      // const entry = {
-      //   createdAt: new Date(),
-      //   user: Faker.name.findName(),
-      //   message: Faker.lorem.paragraph(),
-      //   avatar: Faker.image.avatar()
-      // };
-      const entry = {
-        "snippet":  "<h2>WASSUPPP!</h2>" ,
-        "title":  "WTFFFF"
-      };
+      // TODO add JOI validation for payload here
       console.log('request payload is ', request.payload);
 
       App.methods.db.saveEntry(request.payload, (err) => {
