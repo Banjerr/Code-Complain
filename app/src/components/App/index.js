@@ -93,6 +93,8 @@ class App extends Component {
   render() {
     const { className, ...props } = this.props;
 
+    console.log('complaints are ', this.props.complaints);
+
     return (
       <div className="container">
       <button onClick={this.getComplaints}>Click</button>
