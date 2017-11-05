@@ -1,17 +1,13 @@
 const Hapi = require('hapi');
-
 const Path = require('path');
-
 const Inert = require('inert');
-
 const Nes = require('nes');
-
 const Db = require('./db/db');
-
 const App = new Hapi.Server();
 
 App.connection({
-  port: 9000
+  port: 9000,
+  host: '172.18.0.1'
 });
 
 App.register([Inert, Nes, Db], err => {
@@ -36,7 +32,7 @@ App.register([Inert, Nes, Db], err => {
     method: 'GET',
     path: '/complaints',
     handler: function (request, reply) {
-      App.methods.db.findEntries(5, (err, result) => {
+      App.methods.db.findEntries(8, (err, result) => {
         if (err) {
           return reply().code(500);
         }

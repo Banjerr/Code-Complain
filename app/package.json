@@ -12,6 +12,7 @@
     "nes": "^6.4.3",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "react-nes": "^1.0.6",
     "react-router": "^4.1.2",
     "react-router-dom": "^4.1.2",
     "rethinkdb": "^2.3.3"
