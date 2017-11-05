@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import nes from 'nes';
+import NewComplaint from '../NewComplaint';
 import './style.css';
 
 let complaints = [];
@@ -31,27 +32,6 @@ class App extends Component {
 
   resetComplaintState = (complaints) => {
     this.setState({complaints: complaints, loading: false});
-  }
-
-  addComplaint = (data) => {
-    console.log('adding ', data);
-    fetch('/timeline/createEntry', {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json"
-      },
-      credentials: "same-origin"
-    }).then(function(response) {
-      // response.status     //=> number 100–599
-      // response.statusText //=> String
-      // response.headers    //=> Headers
-      // response.url        //=> String
-
-      return response.text()
-    }, function(error) {
-      console.log('error is ', error.message); //=> String
-    });
   }
 
   componentDidMount = () => {
@@ -93,8 +73,6 @@ class App extends Component {
   render() {
     const { className, ...props } = this.props;
 
-    console.log('complaints are ', this.props.complaints);
-
     return (
       <div className="container">
       <button onClick={this.getComplaints}>Click</button>
@@ -107,6 +85,7 @@ class App extends Component {
             <ComplaintList complaints={this.state.complaints} />
           )
       }
+      <NewComplaint />
       </div>
    );
   }
@@ -124,19 +103,6 @@ class ComplaintList extends Component {
           }
         </ul>
        </div>
-     );
-   }
-}
-
-class NewComplaint extends Component {
-  render() {
-    let complaint = {};
-    return (
-      <div className="container">
-        <textarea id="complaint.snippet" />
-        <input id="complaint.user" />
-        <input onClick={this.addComplaint} type="button">Complain</input>
-      </div>
      );
    }
 }
