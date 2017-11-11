@@ -24,19 +24,17 @@ exports.register = function (server, options, next) {
   });
 
   server.method('db.saveEntry', (entry, callback) => {
-    console.log('db entry is ', entry);
     r.db(db).table(code_snippets).insert(entry).run(conn, callback);
     server.publish('/complaints/updates', entry);
   });
 
   server.method('db.findEntries', (limit, callback) => {
-    r.db(db).table(code_snippets).orderBy(r.desc('createdAt')).limit(limit).run(conn, callback);
+    r.db(db).table(code_snippets).orderBy(r.desc('timestamp')).limit(limit).run(conn, callback);
   });
 
   server.method('db.setupChangefeedPush', () => {
     r.db(db).table(code_snippets).changes().run(conn, (err, cursor) => {
       cursor.each((err, item) => {
-        console.log('db item is ', item);
         server.publish('/complaints/updates', item.new_val);
       });
     });
