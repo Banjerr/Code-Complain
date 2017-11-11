@@ -12,13 +12,15 @@ class NewComplaint extends Component {
       timestamp: '',
     };
 
+    this.clearForm = this.clearForm.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.addComplaint = this.addComplaint.bind(this);
   }
 
   addComplaint = (data) => {
-    console.log('adding ', data);
+    let component = this;
+    
     fetch('/complaints/createEntry', {
       method: "POST",
       body: JSON.stringify(data),
@@ -27,14 +29,15 @@ class NewComplaint extends Component {
       },
       credentials: "same-origin"
     }).then(function(response) {
-      // response.status     //=> number 100–599
-      // response.statusText //=> String
-      // response.headers    //=> Headers
-      // response.url        //=> String
-
-      return response.text()
+      return component.clearForm();
     }, function(error) {
       console.log('error is ', error.message); //=> String
+    });
+  }
+
+  clearForm = () => {
+    this.setState({
+      value: ''
     });
   }
 
@@ -50,7 +53,6 @@ class NewComplaint extends Component {
   }
 
   handleSubmit(event) {
-    console.log('A name was submitted: ', this.state);
     event.preventDefault();
 
     return this.addComplaint(this.state);

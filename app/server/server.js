@@ -6,8 +6,7 @@ const Db = require('./db/db');
 const App = new Hapi.Server();
 
 App.connection({
-  port: 9000,
-  host: '172.18.0.1'
+  port: 9000
 });
 
 App.register([Inert, Nes, Db], err => {
