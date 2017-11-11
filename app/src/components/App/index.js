@@ -25,9 +25,9 @@ class App extends Component {
 
   appendComplaint = (complaint) => {
      // set the state
-     console.log('complaint is ', complaint);
-     let newComplaintList = this.state.complaints.push(complaint);
-     this.setState( {complaints: newComplaintList, loading: false } );
+     let complaintArray = this.state.complaints;
+     complaintArray.unshift(complaint);
+     this.setState( {complaints: complaintArray, loading: false } );
   }
 
   resetComplaintState = (complaints) => {
@@ -52,12 +52,9 @@ class App extends Component {
         console.log(err);
         return false;
       }
-
-     console.log('connected');
     });
 
     var handler = (item) => {
-      console.log('item is ', item);
       return component.appendComplaint(item);
     };
 
@@ -65,8 +62,6 @@ class App extends Component {
       if (err) {
         return console.log('err is ', err);
       }
-
-      console.log('listening');
     });
   }
 
@@ -92,15 +87,26 @@ class App extends Component {
 }
 
 class ComplaintList extends Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.createComplaint = this.createComplaint.bind(this);
+  }
+
+  createComplaint = (complaint) => (
+    <li key={complaint.timestamp}>
+      <p>{complaint.snippet} from {complaint.title}</p>
+    </li>
+  )
+
   render() {
+    let complaintEntries = this.props.complaints;
+    let complaintItems = complaintEntries.map(this.createComplaint);
+
     return (
       <div className="container">
         <ul className="list-group text-center">
-          {
-            this.props.complaints.map((complaint, index) => (
-              <p key={index}>{complaint.snippet} from {complaint.title}</p>
-            ))
-          }
+          {complaintItems}
         </ul>
        </div>
      );
