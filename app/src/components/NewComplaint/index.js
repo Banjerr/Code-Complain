@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
+import brace from 'brace';
+import AceEditor from 'react-ace';
 import './style.css';
+
+import 'brace/mode/javascript';
+import 'brace/theme/twilight';
 
 class NewComplaint extends Component {
   constructor(props) {
@@ -20,7 +25,7 @@ class NewComplaint extends Component {
 
   addComplaint = (data) => {
     let component = this;
-    
+
     fetch('/complaints/createEntry', {
       method: "POST",
       body: JSON.stringify(data),
@@ -41,10 +46,18 @@ class NewComplaint extends Component {
     });
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.state.code_snippet !== nextState.code_snippet) {
+      return false
+    } else {
+      return true;
+    }
+  }
+
   handleChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
+    const target = event.target ? event.target : '';
+    const value = target.value ? target.value : event;
+    const name = target.name ? target.name : 'code_snippet';
 
     this.setState({
       [name]: value,
@@ -71,7 +84,19 @@ class NewComplaint extends Component {
         </label>
         <label>
           Code Snippet:
-          <textarea name="code_snippet" value={this.state.value} onChange={this.handleChange} />
+          <AceEditor
+            mode="javascript"
+            theme="twilight"
+            name="code_snippet"
+            onChange={this.handleChange}
+            editorProps={{$blockScrolling: true}}
+            setOptions={{
+              enableEmmet: true,
+              enableBasicAutocompletion: true,
+              enableLiveAutocompletion: true,
+              useElasticTabstops: true
+            }}
+          />
         </label>
         <input type="submit" value="Submit" />
       </form>
