@@ -3,6 +3,7 @@ import brace from 'brace';
 import AceEditor from 'react-ace';
 import './style.css';
 
+import 'brace/ext/language_tools';
 import 'brace/mode/javascript';
 import 'brace/theme/twilight';
 
@@ -89,7 +90,7 @@ class NewComplaint extends Component {
             theme="twilight"
             name="code_snippet"
             onChange={this.handleChange}
-            editorProps={{$blockScrolling: true}}
+            editorProps={{$blockScrolling: 'Infinity'}}
             setOptions={{
               enableEmmet: true,
               enableBasicAutocompletion: true,
