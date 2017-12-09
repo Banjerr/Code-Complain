@@ -6,12 +6,14 @@ import './style.css';
 
 let complaints = [];
 
+const appHost = window.location.hostname;
+
 class App extends Component {
   constructor(props) {
     super(props);
 
     //Setup the websocket connection and react to updates
-    this.client = new nes.Client('ws://localhost:80');
+    this.client = new nes.Client(~appHost.indexOf('localhost') ? 'ws://localhost:80' : 'ws://code-compla.in:80');
 
     this.getComplaints = this.componentDidMount.bind(this);
     this.resetComplaintState = this.resetComplaintState.bind(this);
@@ -95,7 +97,10 @@ class ComplaintList extends Component {
 
   createComplaint = (complaint) => (
     <li key={complaint.timestamp}>
-      <p>{complaint.snippet} from {complaint.title}</p>
+      <header>
+        {complaint.title} from {complaint.user}
+      </header>
+      <pre>{complaint.code_snippet}</pre>
     </li>
   )
 
