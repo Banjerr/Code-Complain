@@ -1,0 +1,7 @@
+ul li:before {
+  content: none !important;
+}
+
+ul li {
+  margin: 0 0 2%;
+}

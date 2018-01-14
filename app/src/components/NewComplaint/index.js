@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import brace from 'brace';
 import AceEditor from 'react-ace';
+import {PaperButton, PaperLayout, PaperCol, PaperForm, PaperInput} from 'react-paper-css';
 import './style.css';
 
 import 'brace/ext/language_tools';
@@ -75,14 +76,15 @@ class NewComplaint extends Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <label>
-          Name:
-          <input type="text" name="user" value={this.state.value} onChange={this.handleChange} />
-        </label>
-        <label>
-          Title:
-          <input type="text" name="title" value={this.state.value} onChange={this.handleChange} />
-        </label>
+        <div className={'form-group'}>
+          <label className={'input-block'}>Name</label>
+          <input className={'input-block'} type="text" inputSize={'input-block'} name="user" value={this.state.value} onChange={this.handleChange} />
+        </div>          
+
+        <div className={'form-group'}>
+          <label className={'input-block'}>Title</label>
+          <input className={'input-block'} type="text" inputSize={'input-block'} name="title" value={this.state.value} onChange={this.handleChange} />
+        </div> 
         <label>
           Code Snippet:
           <AceEditor
@@ -92,14 +94,12 @@ class NewComplaint extends Component {
             onChange={this.handleChange}
             editorProps={{$blockScrolling: 'Infinity'}}
             setOptions={{
-              enableEmmet: true,
               enableBasicAutocompletion: true,
               enableLiveAutocompletion: true,
-              useElasticTabstops: true
             }}
           />
         </label>
-        <input type="submit" value="Submit" />
+        <PaperButton buttonText={'Complain!'} type="submit" />
       </form>
     );
   }
