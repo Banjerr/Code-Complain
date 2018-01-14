@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import nes from 'nes';
+import {PaperLayout, PaperCol} from 'react-paper-css';
+import ComplaintList from '../ComplainList';
 import NewComplaint from '../NewComplaint';
 import './style.css';
-
-let complaints = [];
 
 const appHost = window.location.hostname;
 
@@ -41,81 +41,43 @@ class App extends Component {
 
     fetch('/complaints')
     .then((resp) => resp.json())
-    .then(function(data) {
-      return component.resetComplaintState(data);
-    });
+    .then((data) => component.resetComplaintState(data));
   }
 
   componentWillMount = () => {
     let component = this;
 
-    this.client.connect(function (err) {
-      if (err) {
-        console.log(err);
-        return false;
-      }
-    });
+    this.client.connect((err) => err ? false : true);
 
     var handler = (item) => {
-      return component.appendComplaint(item);
+      component.appendComplaint(item);
     };
 
-    this.client.subscribe('/complaints/updates', handler, function (err) {
-      if (err) {
-        return console.log('err is ', err);
-      }
-    });
+    this.client.subscribe('/complaints/updates', handler, (err) => err ? console.log('err is ', err) : true);
   }
 
   render() {
     const { className, ...props } = this.props;
 
     return (
-      <div className="container">
-      <button onClick={this.getComplaints}>Click</button>
-      {
-        this.state.loading ?
-          (
-            <p>loading</p>
-          ) :
-          (
-            <ComplaintList complaints={this.state.complaints} />
-          )
-      }
-      <NewComplaint />
-      </div>
+      <PaperLayout className="container">
+        <PaperCol colSize={'col-8'}>
+        {
+          this.state.loading ?
+            (
+              <h2>Loading complaints... wanna complain about that too? <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></h2>
+            ) :
+            (
+              <ComplaintList complaints={this.state.complaints} />
+            )
+        }
+        </PaperCol>
+        <PaperCol colSize={'col-4'}>
+          <NewComplaint />
+        </PaperCol>      
+      </PaperLayout>
    );
   }
-}
-
-class ComplaintList extends Component {
-  constructor(props, context) {
-    super(props, context);
-
-    this.createComplaint = this.createComplaint.bind(this);
-  }
-
-  createComplaint = (complaint) => (
-    <li key={complaint.timestamp}>
-      <header>
-        {complaint.title} from {complaint.user}
-      </header>
-      <pre>{complaint.code_snippet}</pre>
-    </li>
-  )
-
-  render() {
-    let complaintEntries = this.props.complaints;
-    let complaintItems = complaintEntries.map(this.createComplaint);
-
-    return (
-      <div className="container">
-        <ul className="list-group text-center">
-          {complaintItems}
-        </ul>
-       </div>
-     );
-   }
 }
 
 export default App;
